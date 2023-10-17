@@ -1,0 +1,10 @@
+# tasks file for java
+---
+- name: update cache
+  apt: 
+    update_cache: yes
+- name: install java
+  apt:
+    name: "{{java_package_name}}"
+    state: present
+  when: ansible_os_family == "Debian" or ansible_os_family == "RedHat"

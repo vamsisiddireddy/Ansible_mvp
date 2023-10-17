@@ -1,0 +1,5 @@
+---
+# defaults file for java
+java_version : "11"
+java_package_name: "openjdk-{{ java_version }}-jdk"
+family: "RedHat"

@@ -1,0 +1,23 @@
+- name: Check if the lock file exists
+  stat:
+    path: /tmp/command_lock
+  register: lock_file
+- name: Execute the command if the lock file doesn't exist
+  shell: |
+    sudo apt install software-properties-common ca-certificates lsb-release apt-transport-https -y
+    sudo LC_ALL=C.UTF-8 sudo add-apt-repository ppa:ondrej/php -y
+  when: lock_file.stat.exists == false
+
+- name: Create the lock file (mark the command as executed)
+  file:
+    path: /tmp/command_lock
+    state: touch
+  when: lock_file.stat.exists == false
+- name: update cache
+  apt:
+    update_cache: yes
+- name: Install required python version
+  apt:
+    name: php{{req_version}}
+- name: Switch required version 
+  command: "sudo update-alternatives --set php /usr/bin/php{{req_version}}"
